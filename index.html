@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        h6 {
+            margin-top: 0px;
+            margin-bottom: 40px;
+        }
+        body {
+            background-color: #ccffcc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 0px;
+            margin-top:0px;
+            padding: 3px;
+            font-size: 40px;
+            color: #333;
+            font-weight: bold;
+        }
+        table {
+            border-collapse: collapse;
+            width: 300px;
+            height: 300px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            font-size: 46px;
+            border: 3px solid #000;
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+            function renderBoard() {
+                var cells = $('.cell');
+                for (var i = 0; i < cells.length; i++) {
+                    if (board[i] === 1) {
+                        cells[i].innerHTML = 'X';
+                    } else if (board[i] === -1) {
+                        cells[i].innerHTML = 'O';
+                    } else {
+                        cells[i].innerHTML = '';
+                    }
+                }
+            }
+
+            function makeMove(index) {
+                if (board[index] === 0) {
+                    board[index] = 1;
+                    renderBoard();
+                    $.ajax({
+                        url: '/move',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({board: board}),
+                        success: function (data) {
+                            if (data.move !== -1) {
+                                board[data.move] = -1;
+                                renderBoard();
+                            }
+
+                            if (data.winner !== null) {
+                                if (data.winner === 0) {
+                                    alert('It\'s a draw!');
+                                } else if (data.winner === 1) {
+                                    alert('You win!');
+                                } else {
+                                    alert('You lose!');
+                                }
+                                board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                                renderBoard();
+                            }
+                        }
+                    });
+                }
+            }
+
+            $('.cell').click(function () {
+                makeMove($(this).index());
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="h1">
+    <h1>Tic Tac Toe </h1>
+</div>
+<div class="h6">
+    <h6><a href="https://github.com/sravan-poreddy/Tic-Tac-Toe">Source Link</a></h6>
+</div>
+<table>
+    <tr>
+        <td class="cell"></td>
+        <td class="cell"></td>
+        <td class="cell"></td>
+    </tr>
+    <tr>
+        <td class="cell"></td>
+        <td class="cell"></td>
+        <td class="cell"></td>
+    </tr>
+    <tr>
+        <td class="cell"></td>
+        <td class="cell"></td>
+        <td class="cell"></td>
+    </tr>
+</table>
+</body>
+</html>
