@@ -76,7 +76,7 @@ def move():
     # Check if the game is already over
     winner = check_winner(board)
     if winner is not None:
-        return jsonify({'move': -1, 'winner': winner})
+        return jsonify({'move': -1, 'winner': int(winner)})
 
     # Choose a move
     if random.uniform(0, 1) < epsilon:
@@ -93,7 +93,7 @@ def move():
 
     winner = check_winner(new_board)
     if winner is not None:
-        return jsonify({'move': move, 'winner': winner})
+        return jsonify({'move': int(move), 'winner': int(winner)})
 
     # Opponent's move
     opponent_move = get_best_move(new_board)
@@ -102,7 +102,7 @@ def move():
     # Check the result after the opponent's move
     winner = check_winner(new_board)
     if winner is not None:
-        return jsonify({'move': move, 'opponent_move': opponent_move, 'winner': winner})
+        return jsonify({'move': int(move), 'opponent_move': int(opponent_move), 'winner': int(winner)})
 
     # Update Q-table
     state = get_state(board)
@@ -110,7 +110,7 @@ def move():
     reward = 0  # no immediate reward
     update_q_table(state, move, reward, next_state)
 
-    return jsonify({'move': move, 'opponent_move': opponent_move, 'winner': None})
+    return jsonify({'move': int(move), 'opponent_move': int(opponent_move), 'winner': None})
 
 
 if __name__ == '__main__':

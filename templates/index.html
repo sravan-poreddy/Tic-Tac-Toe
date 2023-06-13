@@ -27,7 +27,7 @@
             color: #333;
             font-weight: bold;
         }
-        table {
+        .table {
             border-collapse: collapse;
             width: 300px;
             height: 300px;
@@ -90,8 +90,15 @@
                 }
             }
 
-            $('.cell').click(function () {
-                makeMove($(this).index());
+            // Get all the cells
+            var cells = document.querySelectorAll('.cell');
+
+            // Attach click event listeners to each cell
+            cells.forEach(function(cell) {
+              cell.addEventListener('click', function() {
+                var index = Array.from(cells).indexOf(cell);
+                makeMove(index);
+              });
             });
         });
     </script>
